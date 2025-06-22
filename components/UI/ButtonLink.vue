@@ -49,7 +49,7 @@ defineProps<{
     padding: 0 1rem;
     height: 100%;
     border: 1px solid transparent;
-
+    font-family: 'Bullet Trace 7';
     &__icon {
         height: 1.5rem;
         aspect-ratio: 1;

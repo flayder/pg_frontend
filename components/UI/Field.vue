@@ -22,7 +22,7 @@ const active = ref(false)
         maxlength="6">
 
     <input v-else-if="type === 'date'" v-model="model" class="field" :name="name" :label="label"
-        :placeholder="placeholder" type="text" onfocus="this.type = 'date'"
+        :placeholder="placeholder" type="text" onfocus="this.type = 'date';this.local = 'en-EN'"
         onblur="if (!this.value) this.type = 'text'">
 
     <textarea v-else-if="type === 'textarea'" v-model="model" class="textarea" :name="name"

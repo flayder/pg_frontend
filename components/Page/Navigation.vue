@@ -22,6 +22,7 @@ const pages = [
         icon: 'rotate'
     }
 ]
+
 </script>
 
 <template>
@@ -44,7 +45,7 @@ const pages = [
 <style lang="scss" scoped>
 .navigation {
     &__list {
-        max-width: var(--container);
+        width: clamp(min(100%, var(--container-min-width)), 74%, var(--container-max-width));
         margin: 0 auto;
         padding: 0;
         list-style: none;

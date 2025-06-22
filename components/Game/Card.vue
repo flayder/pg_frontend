@@ -14,7 +14,7 @@ const config = useRuntimeConfig()
             <NuxtImg class="game-card__preview-image" :src="config.public.apiBase + game.preview" alt="preview" />
         </NuxtLink>
         <div class="game-card__info">
-            <div class="game-card__title">{{ game.title }}</div>
+            <NuxtLink class="game-card__title" :to="`/game/${game.path}`">{{ game.title }}</NuxtLink>
             <UIButtonLink class="game-card__link" gradient :to="`/game/${game.path}`">Play</UIButtonLink>
             <div class="game-card__views"><UIIcon class="game-card__views-icon" name="eye" /> {{ game.views }}</div>
             <GameRating class="game-card__rating" :path="game.path" :likes="game.likes" :liked="game.likedByUser" :dislikes="game.dislikes" :disliked="game.dislikedByUser" />
@@ -47,8 +47,8 @@ const config = useRuntimeConfig()
 
     &__title {
         color: var(--color-text);
-        font-family: 'Bullet Trace 7';
         font-weight: bold;
+        text-decoration: none !important;
     }
 
     &__link {

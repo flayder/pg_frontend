@@ -11,7 +11,7 @@ watch(trigger, () => {
         trigger.value = ''
     }
 
-    if (trigger.value) {
+    if (trigger.value == 'Log in' || trigger.value == 'Register') {
         type.value = trigger.value
         modal.value?.showModal()
         trigger.value = ''
@@ -97,25 +97,6 @@ async function handleFormSubmit(event: Event) {
 </template>
 
 <style lang="scss" scoped>
-.modal {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    max-width: 100%;
-    max-height: 100%;
-    width: 100%;
-    height: 100dvh;
-    background-color: var(--color-dialog);
-    backdrop-filter: blur(4px);
-
-    &__content {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-}
-
 .form {
     &__fields {
         display: flex;

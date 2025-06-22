@@ -13,10 +13,11 @@ defineProps<{
 
 <style lang="scss" scoped>
 .card {
-    width: min-content;
     background-color: var(--color-primary);
-    border-radius: 0.5rem;
+    border-radius: .5rem;
     padding: 3rem;
+    position: relative;
+    width: min(100%, 32rem);
 
     &__title {
         color: var(--color-text);

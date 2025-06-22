@@ -1,4 +1,11 @@
 <script setup lang="ts">
+defineEmits(['navigated'])
+const dialogContact = useDialogContact()
+
+defineProps<{
+    isExactActive?: boolean
+}>()
+
 const pages = [
     {
         link: '/docs/Privacy.docx',
@@ -19,9 +26,27 @@ const pages = [
         name: 'How to Cancel Subscription',
     },
     {
-        link: '#',
-        name: 'Contact Us',
+        link: '/complaints',
+        name: 'Complaints',
     },
+]
+
+const mainPages = [
+    {
+        link: '/',
+        name: 'Home',
+        icon: 'home'
+    },
+    {
+        link: '/tags',
+        name: 'Tags',
+        icon: 'hash'
+    },
+    {
+        link: '/random',
+        name: 'Random',
+        icon: 'rotate'
+    }
 ]
 </script>
 
@@ -31,7 +56,14 @@ const pages = [
             <NuxtLink class="footer__logo" to="/">
                 <NuxtImg class="footer__logo-image" src="/images/logo.svg" alt="TTOP" />
             </NuxtLink>
-            <PageNavigation />
+            <UIButtonLink to="/premium" icon="star" class="footer__navigation--premium" gradient @click="$emit('navigated')">
+                Premium
+            </UIButtonLink>
+            <div class="footer__navigation--base">
+                <UIButtonLink :to="page.link" :icon="page.icon" :is-exact-active="isExactActive" @click="$emit('navigated')" v-for="(page, index) in mainPages">
+                    {{ page.name }}
+                </UIButtonLink>
+            </div>
         </div>
         <div class="footer__info">
             <div class="footer__copyright">Porngamestown 2025 (c)</div>
@@ -39,6 +71,11 @@ const pages = [
                 <li v-for="(page, index) in pages" :key="index" class="footer__menu-item">
                     <NuxtLink class="footer__menu-link" :to="page.link" :external="page.external">
                         {{ page.name }}
+                    </NuxtLink>
+                </li>
+                <li class="footer__menu-item">
+                    <NuxtLink class="footer__menu-link" to="#" @click.prevent="dialogContact.open">
+                        Contact us
                     </NuxtLink>
                 </li>
             </ul>
@@ -56,11 +93,40 @@ const pages = [
         padding: 2rem 1rem 1rem;
     }
 
+    .link {
+        align-items: center;
+        border: 1px solid transparent;
+        display: flex;
+        font-family: 'Bullet Trace 7';
+        gap: 1rem;
+        justify-content: center;
+        padding: .75rem 1rem;
+        text-decoration: none;
+        
+        &__label {
+            color: var(--color-text);
+        }
+    }
+
     &__navigation {
         display: flex;
         align-items: center;
-        max-width: var(--container);
+        width: clamp(min(100%, var(--container-min-width)), 74%, var(--container-max-width));
         margin-inline: auto;
+
+        &--base {
+            align-content: center;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        &--premium {
+            @media (width > $desktop) {
+                order: 1;
+            }
+        }
+
+        
 
         @media (width < $desktop) {
             flex-wrap: wrap;
@@ -78,7 +144,7 @@ const pages = [
     &__info {
         display: flex;
         align-items: center;
-        max-width: var(--container);
+        width: clamp(min(100%, var(--container-min-width)), 74%, var(--container-max-width));
         margin-inline: auto;
 
         @media (width < $desktop) {

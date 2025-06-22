@@ -13,6 +13,7 @@ export interface IGame {
     tags?: ITag[]
     likedByUser: boolean
     dislikedByUser: boolean
+    images: []
     date: Date
 }
 

@@ -7,11 +7,21 @@ const user = useUser()
 const client = useClient()
 const router = useRouter()
 
+const { data: profile } = await client.get.profile()
+
 const search: (query: string) => Promise<IGameLink[] | IError> = useDebounce((query) => client.search.games(query), 500)
 
 const query = ref('')
 const output = ref('')
+const openProfile = ref(false)
 const games: Ref<IGameLink[] | never[]> = ref([])
+
+function openProfileFunc() {
+    if(openProfile.value)
+        openProfile.value = false
+    else
+        openProfile.value = true
+}
 
 async function handleSearch() {
     if (query.value) {
@@ -62,26 +72,42 @@ router.beforeEach(() => {
                     alt="TTOP" />
             </NuxtLink>
 
-            <div class="header__search" :class="{ 'header__search--showed': isSearchShowed }">
-                <UIField v-model="query" class="header__search-input" type="search" name="search" placeholder="Search"
-                    @input="handleSearch" />
-                <div v-if="output || games.length > 0" class="header__search-output">
-                    <ul v-if="games.length > 0" class="header__search-output-links">
-                        <li v-for="game in games" :key="game._id" class="header__search-output-item">
-                            <GameLink :game @click="isSearchShowed = false" />
-                        </li>
-                    </ul>
-                    <div v-if="output" class="header__search-output-item">{{ output }}</div>
-                </div>
-            </div>
-
             <div class="header__controls">
                 <UIButton v-if="!user" class="header__login" @click="() => dialogAuth.open('Log in')">Log in</UIButton>
-                <UIButton v-if="!user" class="header__register" gradient @click="() => dialogAuth.open('Register')">
-                    Register
-                </UIButton>
+                <div class="header__register" v-if="!user">
+                    <UIButton gradient @click="() => dialogAuth.open('Register')">
+                        Register
+                    </UIButton>
+                </div>
                 <UIButton v-if="user" class="header__logout" @click="client.auth.logout">Log out</UIButton>
-                <UIButton v-if="user" class="header__profile" icon="user" @click="handleSearch" />
+                <div class="profile" v-if="user">
+                    <UIButton class="header__profile" icon="user" @click="openProfileFunc" />
+                    <div class="profile__wrapper" v-if="profile && openProfile">
+                        <div class="profile__info">
+                            <div class="profile__nickname">Hello, {{ profile.nickname }}</div>
+                            <div>Email: {{ profile.email }}</div>
+                            <div>Subscription: {{ profile.subscriptionStatus }}</div>
+                            <div>
+                                <NuxtLink class="profile__link" to="/forgot-password">
+                                    Reset password
+                                </NuxtLink>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="header__search" :class="{ 'header__search--showed': isSearchShowed }">
+                    <UIField v-model="query" class="header__search-input" type="search" name="search" placeholder="Search"
+                        @input="handleSearch" />
+                    <div v-if="output || games.length > 0" class="header__search-output">
+                        <ul v-if="games.length > 0" class="header__search-output-links">
+                            <li v-for="game in games" :key="game._id" class="header__search-output-item">
+                                <GameLink :game @click="isSearchShowed = false" />
+                            </li>
+                        </ul>
+                        <div v-if="output" class="header__search-output-item">{{ output }}</div>
+                    </div>
+                </div>
                 <UIButton class="header__search-button" icon="search" @click="toggleSearch" />
                 <UIButton class="header__burger" :icon="isNavigationShowed ? 'close' : 'menu'"
                     @click="toggleNavigation" />
@@ -100,25 +126,26 @@ router.beforeEach(() => {
     position: relative;
 
     &__menu {
-        max-width: var(--container);
-        padding: 1.5rem 0;
-        display: flex;
+        // max-width: var(--container);
         align-items: center;
-        justify-content: space-between;
+        display: flex;
         gap: 1rem;
+        justify-content: space-between;
         margin-inline: auto;
-
+        padding: 1.5rem 0;
+        width: clamp(min(100%, var(--container-min-width)), 74%, var(--container-max-width));
         @media (width <=$container) {
             padding: 1.5rem 1rem;
         }
     }
 
     &__logo {
-        height: 100%;
+        height: 3em;
     }
 
     &__logo-image {
         height: 100%;
+        width: auto;
     }
 
     &__logo-image--desktop {
@@ -152,6 +179,9 @@ router.beforeEach(() => {
 
         @media (width >=$desktop) {
             position: relative;
+            flex-grow: 1;
+            order: -1;
+            padding: 0 1rem;
         }
     }
 
@@ -191,6 +221,9 @@ router.beforeEach(() => {
     &__controls {
         display: flex;
         align-items: center;
+        @media (width >=$desktop) {
+            flex-grow: 1;
+        }
     }
 
     &__search-button {
@@ -247,6 +280,52 @@ router.beforeEach(() => {
 
     &__navigation--showed {
         display: revert;
+    }
+}
+.profile {
+    position: relative;
+    &__wrapper {
+        &:after,
+        &:before {
+            border-left: .75rem solid transparent;
+            border-right: .75rem solid transparent;
+            content: "";
+            left: 50%;
+            position: absolute;
+            translate: -50% 0;
+        }
+        &:before {
+            border-bottom: 1rem solid var(--color-accent);
+            bottom: 0;
+        }
+        &:after {
+            border-bottom: 1rem solid var(--color-primary);
+            bottom: -2px;
+        }
+    }
+    
+    &__info {
+        background-color: var(--color-primary);
+        border: 1px solid var(--color-accent);
+        border-radius: .5rem;
+        color: var(--color-text);
+        display: flex;
+        flex-direction: column;
+        font-weight: 700;
+        gap: .5rem;
+        padding: 1rem;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        width: -moz-max-content;
+        width: max-content;
+    }
+    &__nickname {
+        border-bottom: 1px solid var(--color-accent);
+        padding-bottom: .5rem;
+    }
+    &__link {
+        color: var(--color-accent);
     }
 }
 </style>

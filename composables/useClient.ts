@@ -13,6 +13,32 @@ export default function () {
 
     return {
         auth: {
+            async forgot(email: string) {
+                return await $fetch(`${config.public.apiBase}/api/auth/forgot-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: { email },
+                    onResponseError({ response }) {
+                        toast.error(response._data.message)
+                    },
+                }).catch(() => null)
+            },
+            async reset(token: string, password: string) {
+                return await $fetch(`${config.public.apiBase}/api/auth/reset/${token}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: { password },
+                    onResponse( {response} ) {
+                        if(response.ok) {
+                            toast.success(response._data.message)
+                            navigateTo('/')
+                        }
+                    },
+                    onResponseError({ response }) {
+                        toast.error(response._data.message)
+                    },
+                }).catch(() => null)
+            },
             async login(email: string, password: string, captcha: string) {
                 return await $fetch(`${config.public.apiBase}/api/auth/login`, {
                     method: 'POST',
@@ -20,6 +46,7 @@ export default function () {
                     body: { email, password, captcha },
                     onResponse({ response }) {
                         if (response.ok) {
+                            console.log('response._data', response._data)
                             dialogAuth.close()
                             user.value = true
                             toast.success(response._data.message)
@@ -132,6 +159,24 @@ export default function () {
         },
 
         get: {
+            async random(id?: string) {
+                const cloneId = id ?? ''
+                return await useAsyncData(
+                    `random${cloneId}`,
+                    () =>
+                        $fetch<IGame | IError>(
+                            `${config.public.apiBase}/api/games/random?id=${cloneId}`,
+                            {
+                                headers: useRequestHeaders(['cookie']),
+                                credentials: 'include',
+                            }
+                        ),
+                    {
+                        watch: [user],
+                    }
+                )
+            },
+
             async games() {
                 return await useAsyncData(
                     'games',
@@ -176,15 +221,15 @@ export default function () {
 
             async gamesByTags(query: LocationQueryValue) {
                 return await useAsyncData(
-                    'gamesByTags',
-                    () =>
-                        $fetch<IGame[]>(
+                    `gamesByTags${query}`,
+                    () => {
+                        return $fetch<IGame[]>(
                             `${config.public.apiBase}/api/games/games-by-tags?tags=${query}`,
                             {
                                 headers: useRequestHeaders(['cookie']),
                                 credentials: 'include',
                             }
-                        ),
+                        )},
                     {
                         watch: [user],
                     }
@@ -218,13 +263,13 @@ export default function () {
         },
 
         send: {
-            async gameProblem(email: string, message: string) {
+            async gameProblem(email: string, message: string, captcha: string) {
                 return await $fetch<IGame[] | never[]>(
                     `${config.public.apiBase}/api/games/send`,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: { email, message },
+                        body: { email, message, captcha },
                         onResponseError({ response }) {
                             toast.error(response._data.message)
                         },

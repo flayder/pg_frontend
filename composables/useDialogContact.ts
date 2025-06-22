@@ -3,7 +3,10 @@ export default function () {
 
     return {
         open() {
-            dialogContact.value = 'Opened'
+            if(dialogContact.value != 'Opened')
+                dialogContact.value = 'Opened'
+            else
+                dialogContact.value = 'Opened1'
         },
         close() {
             dialogContact.value = 'Close'
