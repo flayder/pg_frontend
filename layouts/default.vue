@@ -6,6 +6,7 @@
         <SvgSprite />
         <DialogAuth />
         <DialogContact />
+        <DialogNotification />
         <PopoverToast />
         <PageHeader />
         <div class="layout__content">
@@ -25,10 +26,10 @@
     background-color: var(--color-primary);
 
     &__content {
-        flex-grow: 1;
-        width: 100%;
         display: grid;
-        grid-template-columns: 1fr min(100%, var(--container)) 1fr;
+        flex-grow: 1;
+        grid-template-columns: 1fr clamp(min(100%, var(--container-min-width)), 74%, var(--container-max-width)) 1fr;
+        width: 100%;
     }
 
     &__banner {

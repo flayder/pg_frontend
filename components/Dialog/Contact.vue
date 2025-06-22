@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const modal = useTemplateRef('dialog')
-
+const toast = useToast()
 const trigger = useState('dialogContact', () => '')
 
 watch(trigger, () => {
@@ -23,16 +23,18 @@ const client = useClient()
 
 const email = ref('')
 const message = ref('')
+const captcha = ref('')
 
 async function handleFormSubmit(event: Event) {
     const formData = new FormData(event.target as HTMLFormElement)
-    console.log(formData.get('h-captcha-response'))
+    captcha.value = formData.get('h-captcha-response') as string
 
-    const response = await client.send.gameProblem(email.value, message.value)
+    const response = await client.send.gameProblem(email.value, message.value, captcha.value)
 
     if (response.message === "Message received successfully") {
         email.value = ''
         message.value = ''
+        toast.success(response.message)
         close()
     }
 }
@@ -60,24 +62,6 @@ async function handleFormSubmit(event: Event) {
 </template>
 
 <style lang="scss" scoped>
-.modal {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    max-width: 100%;
-    max-height: 100%;
-    width: 100%;
-    height: 100dvh;
-    background-color: var(--color-dialog);
-    backdrop-filter: blur(4px);
-
-    &__content {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-}
 
 .form {
     &__fields {

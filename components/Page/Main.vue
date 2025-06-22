@@ -46,6 +46,10 @@ useHead({
         color: var(--color-text);
         padding: 0;
         margin: 0;
+
+        @media (width > $desktop) {
+            font-size: 2rem;
+        }
     }
 }
 </style>

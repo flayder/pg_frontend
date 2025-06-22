@@ -8,15 +8,24 @@ const route = useRoute()
 const active = computed(() => route.query.tags?.toString().split(',').includes(name))
 
 const query = computed(() => {
-    const tags = new Set(route.query.tags?.toString().split(','))
+    var tags = new Set(route.query.tags?.toString().split(','))
 
     if (route.query.tags) {
         if (active.value) {
             tags.delete(name)
+            
             return Array.from(tags).join(',')
         }
         
         tags.add(name)
+
+        if(Array.from(tags).length > 3) {
+            console.log(route.query.tags?.toString().split(','))
+            console.log(Array.from(tags).length - 2)
+            tags = new Set(route.query.tags?.toString().split(',').splice(1, 2))
+            tags.add(name)
+        }
+
         return Array.from(tags).join(',')
     }
 

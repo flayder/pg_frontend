@@ -1,17 +1,30 @@
 <script setup lang="ts">
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 const route = useRoute()
 const client = useClient()
 const dialogContact = useDialogContact()
 
 const { data: application }  = await client.get.game(route.params.path as string)
 const { data: games } = await client.get.games()
-const similarGames = computed(() => games.value?.filter(({ id }) => id !== application.value?.id))
+const similarGames = computed(() => games.value?.filter(({ id, active }) => id !== application.value?.id && active !== false))
+
+onMounted(() => {
+  Fancybox.bind('[data-fancybox="gallery"]', {
+    // можно задать кастомные параметры
+    Thumbs: false,
+    Toolbar: {
+      display: ["zoom", "close"]
+    }
+  });
+});
+
 </script>
 
 <template>
     <PageMain :title="application.title">
         <section v-if="application" class="game">
-            <div class="game__description">
+}            <div class="game__description">
                 {{ application.description }}
             </div>
             <div class="game__tags">
@@ -30,6 +43,11 @@ const similarGames = computed(() => games.value?.filter(({ id }) => id !== appli
                     <UIIcon class="game__views" name="eye" /> {{ application?.views }}
                 </div>
             </footer>
+        </section>
+        <section class="similar-images" v-if="application?.images">
+            <a :href="'https://porngamestown.com' + image" :key="key" data-fancybox="gallery" class="similar-images-link" v-for="(image, key) in application.images">
+                <img :src="'https://porngamestown.com' + image" :alt="application.title">
+            </a>
         </section>
         <section class="similar-games">
             <header class="similar-games__title">Similar games</header>
@@ -125,6 +143,31 @@ const similarGames = computed(() => games.value?.filter(({ id }) => id !== appli
     &__slider--desktop {
         @media (width < $container) {
             display: none;
+        }
+    }
+}
+
+.similar-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    &-link {
+        display: flex;
+        width: calc(25% - 1rem);
+
+        img {
+            width: 100%;
+            object-fit: cover;
+            height: 250px;
+            border-radius: 4px;
+        }
+
+        @media(width < $desktop) {
+            width: calc(50% - 1rem);
+            img {
+                height: 170px;
+            }
         }
     }
 }

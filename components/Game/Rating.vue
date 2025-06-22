@@ -76,6 +76,7 @@ async function handleClick(type: 'like' | 'dislike') {
 
     &__button {
         color: var(--color-tertiary);
+        padding: 0;
     }
 
     &__button--checked {

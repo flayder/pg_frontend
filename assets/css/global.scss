@@ -119,3 +119,36 @@ progress {
 summary {
     display: list-item;
 }
+
+dialog:-internal-dialog-in-top-layer::backdrop {
+    background: rgba(0, 0, 0, .8);
+}
+
+.modal {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    min-height: 100dvh;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--color-dialog);
+    backdrop-filter: blur(4px);
+    z-index: 9;
+    position: fixed;
+    left: 0;
+    top: 0;
+    &__content {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.random-game .game-card__link {
+    font-size: inherit !important;
+    padding: .75rem 1rem !important;
+}

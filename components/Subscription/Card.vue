@@ -62,6 +62,7 @@ const dialogAuth = useDialogAuth()
 
     &__description {
         padding: 3rem 0 1rem;
+        font-family: "Bullet Trace 7";
     }
 
     &__discount {
@@ -93,7 +94,6 @@ const dialogAuth = useDialogAuth()
     }
 
     &__button {
-        font-family: inherit;
         padding: 1rem;
         width: 100%;
     }

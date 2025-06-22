@@ -20,17 +20,16 @@ defineProps<{
 
 <style lang="scss" scoped>
 .button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: 'Bullet Trace 7';
-    display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 1rem;
-    padding: 0;
-    height: 100%;
+    background-color: transparent;
+    border: none;
     color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    font-family: 'Bullet Trace 7';
+    gap: 1rem;
+    justify-content: center;
+    padding: 1rem .5rem;
 
     &__icon {
         height: 1.5rem;
@@ -41,8 +40,8 @@ defineProps<{
 
 .button--gradient {
     background-image: var(--gradient-accent);
-    border-radius: 0.5rem;
-    padding: 0.5rem 4rem;
+    border-radius: .5rem;
+    padding: 1rem 4rem;
 }
 
 .button--outline {
