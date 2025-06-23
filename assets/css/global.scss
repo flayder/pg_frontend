@@ -135,7 +135,7 @@ dialog:-internal-dialog-in-top-layer::backdrop {
     height: 100%;
     overflow: auto;
     background-color: var(--color-dialog);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(10px);
     z-index: 9;
     position: fixed;
     left: 0;

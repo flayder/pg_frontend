@@ -35,8 +35,7 @@ onMounted(() => {
             <iframe class="game__application" :src="`https://porngamestown.com${application.gamePath}`"
                 allowfullscreen />
             <footer class="game__footer">
-                <UIButton class="game__problem" icon="problem" @click="dialogContact.open">Any problem? Contact us!
-                </UIButton>
+                <div></div>
                 <div class="game__rating">
                     <GameRating :path="application.path" :likes="application.likes" :liked="application.likedByUser"
                         :dislikes="application.dislikes" :disliked="application.dislikedByUser" />
@@ -44,11 +43,13 @@ onMounted(() => {
                 </div>
             </footer>
         </section>
-        <section class="similar-images" v-if="application?.images">
+        <section class="similar-images" v-if="application?.images?.length > 0">
+            <header class="similar-games__title">Screenshots</header>
             <a :href="'https://porngamestown.com' + image" :key="key" data-fancybox="gallery" class="similar-images-link" v-for="(image, key) in application.images">
                 <img :src="'https://porngamestown.com' + image" :alt="application.title">
             </a>
         </section>
+        <UIButton class="game__problem" icon="problem" @click="dialogContact.open">Any problem? Contact us!</UIButton>
         <section class="similar-games">
             <header class="similar-games__title">Similar games</header>
             <Carousel class="similar-games__slider similar-games__slider--mobile" :gap="16" wrap-around>
@@ -128,6 +129,7 @@ onMounted(() => {
         color: var(--color-text);
         font-family: 'Bullet Trace 7';
         font-size: 1.5rem;
+        width: 100%;
     }
 
     &__slider {
@@ -150,12 +152,12 @@ onMounted(() => {
 .similar-images {
     display: flex;
     flex-wrap: wrap;
+    padding: 1rem 0;
+    width: calc(100% + 1rem);
     gap: 1rem;
-
     &-link {
         display: flex;
         width: calc(25% - 1rem);
-
         img {
             width: 100%;
             object-fit: cover;

@@ -7,7 +7,7 @@ const user = useUser()
 const client = useClient()
 const router = useRouter()
 
-const { data: profile } = await client.get.profile()
+var { data: profile } = await client.get.profile()
 
 const search: (query: string) => Promise<IGameLink[] | IError> = useDebounce((query) => client.search.games(query), 500)
 
@@ -15,6 +15,13 @@ const query = ref('')
 const output = ref('')
 const openProfile = ref(false)
 const games: Ref<IGameLink[] | never[]> = ref([])
+
+watch(user, async (val, oldVal) => {
+    if(val) {
+        user.value = val
+        profile.value = await client.get.profile() as any
+    }
+})
 
 function openProfileFunc() {
     if(openProfile.value)
