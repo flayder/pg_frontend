@@ -61,7 +61,7 @@ onMounted(() => {
             </div>
             <div class="game__iframe">
                 <button v-if="$device.isIos" class="game__iframe-fullscreen" :class="{'game__iframe__btn-full': isFullScreen}" @click="iosFullScreen"></button>
-                <iframe class="game__application" :class="{'game__iframe-full': isFullScreen}" :src="`https://porngamestown.com${application.gamePath}`" allowfullscreen />
+                <iframe class="game__application" :class="{'game__iframe-full': isFullScreen}" :src="`https://porngamestown.com${application.gamePath}`" allowfullscreen allow="autoplay; fullscreen" />
             </div>
             <footer class="game__footer">
                 <div></div>
