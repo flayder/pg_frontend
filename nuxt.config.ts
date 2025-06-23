@@ -16,5 +16,10 @@ export default defineNuxtConfig({
     }
   },
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxt/image', 'vue3-carousel-nuxt']
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/image',
+    'vue3-carousel-nuxt',
+    '@nuxtjs/device'
+  ]
 })

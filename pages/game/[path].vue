@@ -4,10 +4,19 @@ import "@fancyapps/ui/dist/fancybox/fancybox.css";
 const route = useRoute()
 const client = useClient()
 const dialogContact = useDialogContact()
+const $device = useDevice()
+const isFullScreen = ref(false)
 
 const { data: application }  = await client.get.game(route.params.path as string)
 const { data: games } = await client.get.games()
 const similarGames = computed(() => games.value?.filter(({ id, active }) => id !== application.value?.id && active !== false))
+
+const iosFullScreen = () => {
+    if(!isFullScreen.value)
+        isFullScreen.value = true
+    else
+        isFullScreen.value = false
+}
 
 onMounted(() => {
   Fancybox.bind('[data-fancybox="gallery"]', {
@@ -18,9 +27,24 @@ onMounted(() => {
     }
   });
 
-  //var iframe = document.querySelector('#')
 
-});
+  if($device.isIos) {
+
+    const setBtnStyles = () => {
+      var iframe: any = document.querySelector('.game__application')
+      var iframeBtn: any = document.querySelector('.game__iframe-fullscreen')
+      var btnWidth = 33 + iframe.clientWidth * 0.025
+    
+      iframeBtn.style.width = btnWidth + 'px'
+      iframeBtn.style.height = btnWidth + 'px'
+    }
+
+    setBtnStyles()
+
+    window.addEventListener('resize', setBtnStyles)
+  }
+
+})
 
 </script>
 
@@ -35,8 +59,10 @@ onMounted(() => {
                     <GameTag class="game__tag" :name="tag.name" />
                 </li>
             </div>
-            <iframe class="game__application" id="iframe-game" :src="`https://porngamestown.com${application.gamePath}`"
-                allowfullscreen allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" />
+            <div class="game__iframe">
+                <button v-if="$device.isIos" class="game__iframe-fullscreen" :class="{'game__iframe__btn-full': isFullScreen}" @click="iosFullScreen"></button>
+                <iframe class="game__application" :class="{'game__iframe-full': isFullScreen}" :src="`https://porngamestown.com${application.gamePath}`" allowfullscreen />
+            </div>
             <footer class="game__footer">
                 <div></div>
                 <div class="game__rating">
@@ -77,6 +103,32 @@ onMounted(() => {
     gap: 1rem;
     padding: 1rem 0;
     border-bottom: 1px solid var(--color-tertiary);
+
+    &__iframe {
+        position: relative;
+
+        &-full {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 91;
+            width: 100%;
+            height: 100%;
+        }
+
+        &-fullscreen {
+            background: transparent;
+            border: none;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 92;
+        }
+
+        &__btn-full {
+            position: fixed;
+        }
+    }
 
     &__description {
         color: var(--color-text);
