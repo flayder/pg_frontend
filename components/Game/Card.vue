@@ -6,6 +6,7 @@ defineProps<{
 }>()
 
 const config = useRuntimeConfig()
+
 </script>
 
 <template>

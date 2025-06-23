@@ -198,7 +198,7 @@ export default function () {
 
             async game(path: string) {
                 return await useAsyncData(
-                    'game',
+                    `game${path}`,
                     () =>
                         $fetch<IGame | IError>(
                             `${config.public.apiBase}/api/games/game/${path}  `,

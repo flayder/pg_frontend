@@ -18,6 +18,10 @@ const iosFullScreen = () => {
         isFullScreen.value = false
 }
 
+watch(route, async (routePar) => {
+    application.value = await client.get.game(routePar.params.path as string)
+})
+
 onMounted(() => {
   Fancybox.bind('[data-fancybox="gallery"]', {
     // можно задать кастомные параметры
