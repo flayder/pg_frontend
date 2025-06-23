@@ -17,6 +17,9 @@ onMounted(() => {
       display: ["zoom", "close"]
     }
   });
+
+  var iframe = document.querySelector('#')
+
 });
 
 </script>
@@ -32,8 +35,8 @@ onMounted(() => {
                     <GameTag class="game__tag" :name="tag.name" />
                 </li>
             </div>
-            <iframe class="game__application" :src="`https://porngamestown.com${application.gamePath}`"
-                allowfullscreen />
+            <iframe class="game__application" id="iframe-game" :src="`https://porngamestown.com${application.gamePath}`"
+                allowfullscreen allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" />
             <footer class="game__footer">
                 <div></div>
                 <div class="game__rating">
@@ -44,7 +47,7 @@ onMounted(() => {
             </footer>
         </section>
         <section class="similar-images" v-if="application?.images?.length > 0">
-            <header class="similar-games__title">Screenshots</header>
+            <header class="similar-games__title">Images</header>
             <a :href="'https://porngamestown.com' + image" :key="key" data-fancybox="gallery" class="similar-images-link" v-for="(image, key) in application.images">
                 <img :src="'https://porngamestown.com' + image" :alt="application.title">
             </a>
