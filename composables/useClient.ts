@@ -50,8 +50,6 @@ export default function () {
                             dialogAuth.close()
                             user.value = true
                             toast.success(response._data.message)
-
-                            window.location.reload()
                         }
                     },
                     onResponseError({ response }) {
