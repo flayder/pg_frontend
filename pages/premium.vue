@@ -58,11 +58,14 @@ const subscriptions = [
             </div>
             <UIButtonLink to="https://support.ccbill.com" gradient>Cancel subscription</UIButtonLink>
         </div>
-        <ul v-else class="subscriptions-list">
-            <li v-for="(subscription, index) in subscriptions" :key="index" class="subscriptions-list__item">
-                <SubscriptionCard :subscription :authenticated />
-            </li>
-        </ul>
+        <div class="subscription__bottom" v-else>
+            <header class="subscription__title" style="color: var(--gradient-accent);">When paying, please be sure to indicate the same email address as on the website!</header>
+            <ul class="subscriptions-list">
+                <li v-for="(subscription, index) in subscriptions" :key="index" class="subscriptions-list__item">
+                    <SubscriptionCard :subscription :authenticated />
+                </li>
+            </ul>
+        </div>
     </PageMain>
 </template>
 

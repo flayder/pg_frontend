@@ -55,7 +55,7 @@ onMounted(() => {
 <template>
     <PageMain :title="application.title">
         <section v-if="application" class="game">
-}            <div class="game__description">
+            <div class="game__description">
                 {{ application.description }}
             </div>
             <div class="game__tags">

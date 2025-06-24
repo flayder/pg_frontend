@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { IError } from '~/types/error'
 import type { IGameLink } from '~/types/game'
+import type { IProfile } from '~/types/profile'
 
 const dialogAuth = useDialogAuth()
 const user = useUser()
 const client = useClient()
 const router = useRouter()
 
-var { data: profile } = await client.get.profile()
+var { data: profile } : any = await client.get.profile()
 
 const search: (query: string) => Promise<IGameLink[] | IError> = useDebounce((query) => client.search.games(query), 500)
 
@@ -93,7 +94,10 @@ router.beforeEach(() => {
                         <div class="profile__info">
                             <div class="profile__nickname">Hello, {{ profile.nickname }}</div>
                             <div>Email: {{ profile.email }}</div>
-                            <div>Subscription: {{ profile.subscriptionStatus }}</div>
+                            <div>Subscription: {{ profile.subscriptionStatus === 'unbill' ? 'not' : '' }} subscribed</div>
+                            <div v-if="profile?.subscriptionExpires">
+                                End date: {{ new Date(profile.subscriptionExpires).toLocaleString() }}
+                            </div>
                             <div>
                                 <NuxtLink class="profile__link" to="/forgot-password">
                                     Reset password
