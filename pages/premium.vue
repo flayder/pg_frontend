@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const client = useClient()
+const user = useUser()
 
 const { data: profile } = await client.get.profile()
 
@@ -59,7 +60,7 @@ const subscriptions = [
             <UIButtonLink to="https://support.ccbill.com" gradient>Cancel subscription</UIButtonLink>
         </div>
         <div class="subscription__bottom" v-else>
-            <header class="subscription__title" style="color: var(--gradient-accent);">When paying, please be sure to indicate the same email address as on the website!</header>
+            <header class="subscription__title" v-if="user" style="color: var(--gradient-accent);">When paying, please be sure to indicate the same email address as on the website!</header>
             <ul class="subscriptions-list">
                 <li v-for="(subscription, index) in subscriptions" :key="index" class="subscriptions-list__item">
                     <SubscriptionCard :subscription :authenticated />
