@@ -290,6 +290,9 @@ export default function () {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: { email, message, captcha },
+                        onResponse: async ({response}) => {
+                            await responseObj.metrica.handleMetrica('contact_form')
+                        },
                         onResponseError({ response }) {
                             toast.error(response._data.message)
                         },
