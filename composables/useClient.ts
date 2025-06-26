@@ -11,13 +11,17 @@ export default function () {
     const user = useUser()
     const dialogAuth = useDialogAuth()
 
-    return {
+    const responseObj = {
         auth: {
             async forgot(email: string) {
                 return await $fetch(`${config.public.apiBase}/api/auth/forgot-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: { email },
+                    onResponse: ({ response }) => {
+                        if(response.ok)
+                            responseObj.metrica.handleMetrica('forgot')
+                    },
                     onResponseError({ response }) {
                         toast.error(response._data.message)
                     },
@@ -28,10 +32,11 @@ export default function () {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: { password },
-                    onResponse( {response} ) {
+                    onResponse: ( {response} ) => {
                         if(response.ok) {
                             toast.success(response._data.message)
                             navigateTo('/')
+                            responseObj.metrica.handleMetrica('reset')
                         }
                     },
                     onResponseError({ response }) {
@@ -44,12 +49,13 @@ export default function () {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: { email, password, captcha },
-                    onResponse({ response }) {
+                    onResponse: ({ response }) => {
                         if (response.ok) {
-                            console.log('response._data', response._data)
+                            //console.log('response._data', response._data)
                             dialogAuth.close()
                             user.value = true
                             toast.success(response._data.message)
+                            responseObj.metrica.handleMetrica('login')
                         }
                     },
                     onResponseError({ response }) {
@@ -94,9 +100,10 @@ export default function () {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: { email, nickname, birthdate, password, captcha },
-                        onResponse({ response }) {
+                        onResponse: ({ response }) => {
                             if (response.ok) {
                                 dialogAuth.close()
+                                responseObj.metrica.handleMetrica('register')
                                 navigateTo('/confirm')
                                 toast.success(response._data.message)
                             }
@@ -254,6 +261,19 @@ export default function () {
             },
         },
 
+        metrica: {
+            async handleMetrica(event: string, value: string = '', ip: string = '') {
+                return await $fetch(
+                    `${config.public.apiBase}/api/metrica`,
+                    {
+                        method: 'POST',
+                        headers: {'Content-type': 'application/json'},
+                        body: {event, value, ip}
+                    }
+                )
+            },
+        },
+
         search: {
             async games(query: string) {
                 return await $fetch<IGameLink[] | IError>(
@@ -284,6 +304,9 @@ export default function () {
                         method: 'POST',
                         headers: useRequestHeaders(['cookie']),
                         credentials: 'include',
+                        onResponse: ({ response }) => {
+                            responseObj.metrica.handleMetrica('like', path)
+                        },
                         onResponseError({ response }) {
                             toast.error(response._data.message)
                         },
@@ -298,6 +321,9 @@ export default function () {
                         method: 'POST',
                         headers: useRequestHeaders(['cookie']),
                         credentials: 'include',
+                        onResponse: ({ response }) => {
+                            responseObj.metrica.handleMetrica('like', path)
+                        },
                         onResponseError({ response }) {
                             toast.error(response._data.message)
                         },
@@ -306,4 +332,6 @@ export default function () {
             },
         },
     }
+
+    return responseObj
 }

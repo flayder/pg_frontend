@@ -4,6 +4,12 @@ defineProps<{
     authenticated: boolean
 }>()
 
+const client = useClient()
+
+const metricaClick = async (name: string) => {
+    await client.metrica.handleMetrica('payment', name)
+}
+
 const dialogAuth = useDialogAuth()
 </script>
 
@@ -19,7 +25,7 @@ const dialogAuth = useDialogAuth()
             <UIIcon class="subscription-card__discount-icon" name="star" /> {{ subscription.discount }}
         </div>
         <UIButtonLink v-if="authenticated" class="subscription-card__link"
-            :class="{ 'subscription-card__link--accent': subscription.accent }" :to="subscription.link" gradient>Get
+            :class="{ 'subscription-card__link--accent': subscription.accent }" :to="subscription.link" @click="() => metricaClick(subscription.name)" gradient>Get
             Premium</UIButtonLink>
         <UIButton v-else class="subscription-card__button"
             :class="{ 'subscription-card__button--accent': subscription.accent }" gradient @click="() => dialogAuth.open('Register')">Get Premium</UIButton>

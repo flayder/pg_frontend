@@ -35,6 +35,7 @@ async function handleFormSubmit(event: Event) {
         email.value = ''
         message.value = ''
         toast.success(response.message)
+        client.metrica.handleMetrica('contact')
         close()
     }
 }

@@ -31,6 +31,10 @@ function openProfileFunc() {
         openProfile.value = true
 }
 
+async function handleSearchBlur(event: any) {
+    await client.metrica.handleMetrica('search', event.target.value)
+}
+
 async function handleSearch() {
     if (query.value) {
         const data = await search(query.value)
@@ -109,7 +113,7 @@ router.beforeEach(() => {
                 
                 <div class="header__search" :class="{ 'header__search--showed': isSearchShowed }">
                     <UIField v-model="query" class="header__search-input" type="search" name="search" placeholder="Search"
-                        @input="handleSearch" />
+                        @input="handleSearch" @blur="handleSearchBlur" />
                     <div v-if="output || games.length > 0" class="header__search-output">
                         <ul v-if="games.length > 0" class="header__search-output-links">
                             <li v-for="game in games" :key="game._id" class="header__search-output-item">

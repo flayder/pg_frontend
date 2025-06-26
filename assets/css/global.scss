@@ -131,7 +131,6 @@ dialog:-internal-dialog-in-top-layer::backdrop {
     max-width: 100%;
     max-height: 100%;
     width: 100%;
-    min-height: 100dvh;
     height: 100%;
     overflow: auto;
     background-color: var(--color-dialog);
@@ -141,7 +140,8 @@ dialog:-internal-dialog-in-top-layer::backdrop {
     left: 0;
     top: 0;
     &__content {
-        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;

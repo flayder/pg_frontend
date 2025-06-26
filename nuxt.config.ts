@@ -10,6 +10,11 @@ export default defineNuxtConfig({
       }
     }
   },
+  app: {
+    head: {
+      meta: [{ name: "viewport", content: "initial-scale=1, maximum-scale=1, user-scalable=no" }],
+    }
+  },
   runtimeConfig: {
     public: {
       apiBase: 'https://porngamestown.com'

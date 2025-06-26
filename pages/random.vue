@@ -11,6 +11,8 @@ import type { IGame } from '~/types/game';
             id = game.value.id
         }
 
+        client.metrica.handleMetrica('random', id)
+
         const {data: response} = await client.get.random(id as string)
         game.value = response.value
     }
