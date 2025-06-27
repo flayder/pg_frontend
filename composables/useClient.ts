@@ -325,7 +325,7 @@ export default function () {
                         headers: useRequestHeaders(['cookie']),
                         credentials: 'include',
                         onResponse: ({ response }) => {
-                            responseObj.metrica.handleMetrica('like', path)
+                            responseObj.metrica.handleMetrica('dislike', path)
                         },
                         onResponseError({ response }) {
                             toast.error(response._data.message)
