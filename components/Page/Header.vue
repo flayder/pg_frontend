@@ -32,7 +32,8 @@ function openProfileFunc() {
 }
 
 async function handleSearchBlur(event: any) {
-    await client.metrica.handleMetrica('search', event.target.value)
+    if(event.target.value)
+        await client.metrica.handleMetrica('search', event.target.value)
 }
 
 async function handleSearch() {
