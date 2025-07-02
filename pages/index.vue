@@ -1,10 +1,24 @@
 <script setup lang="ts">
 const client = useClient()
 const { data: games } = await client.get.games()
-
 const sortBy = ref('')
 
-const sortedGames = computed(() => (sortBy.value === 'views') ? games.value?.toSorted((a, b) => -(a.views - b.views)) : games.value)
+const toSorted = () => {
+    return (Array.isArray(games.value)) ? games.value.slice().sort((a, b) => {
+        switch (sortBy.value) {
+          case "Popular":
+            return b.views - a.views;
+          case "Best":
+            return b.likes - a.likes;
+          case "Date":
+            return new Date(b.date) - new Date(a.date); // date: "YYYY-MM-DD"
+          default:
+            return 0;
+        }
+  }) : games.value;
+}
+
+const sortedGames = computed(() => toSorted())
 </script>
 
 <template>
@@ -12,7 +26,9 @@ const sortedGames = computed(() => (sortBy.value === 'views') ? games.value?.toS
         <template #menu>
             <UIField v-model="sortBy" name="sort">
                 <option value="" selected>Sort by ...</option>
-                <option value="views" selected>Sort by views</option>
+                <option value="Popular">Sort by populars</option>
+                <option value="Best">Sort by the best</option>
+                <option value="Date">Sort by date</option>
             </UIField>
         </template>
         <ul class="games-list">

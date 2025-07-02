@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const modal = useTemplateRef('dialog')
+const toast = useToast()
 
 const trigger = useState('dialogAuth', () => '')
 
@@ -33,8 +34,14 @@ const email = ref('')
 const birthday = ref('')
 const password = ref('')
 const confirm = ref('')
+const privacy = ref(true)
 
 async function handleFormSubmit(event: Event) {
+    if(!privacy.value) {
+        toast.error('You can`t register if you not confirm checkbox personal data')
+        return
+    }
+
     const formData = new FormData(event.target as HTMLFormElement)
     const captcha = formData.get('h-captcha-response')?.toString() ?? ''
 
@@ -74,6 +81,10 @@ async function handleFormSubmit(event: Event) {
                         <UIField v-model.trim="birthday" type="date" name="birthday" placeholder="Birthday" required/>
                         <UIField v-model.trim="password" type="password" name="password" placeholder="Password" required/>
                         <UIField v-model.trim="confirm" type="password" name="confirm" placeholder="Confirm password" required/>
+                        <label class="label">
+                            <span><UIField v-model.trim="privacy" type="checkbox" name="privacy" required /></span>
+                            <span>I have read and agree to the <a href="/docs/Terms-of-Service.docx">Terms and Conditions</a></span>
+                        </label>
                         <HCaptcha id="auth" />
                     </div>
 
@@ -97,6 +108,19 @@ async function handleFormSubmit(event: Event) {
 </template>
 
 <style lang="scss" scoped>
+.label {
+    display: flex;
+    input {
+        margin-right: 10px;
+    }
+    span {
+        color: #fff;
+    }
+    a {
+        color: var(--color-accent);
+        text-decoration: none;
+    }
+}
 .form {
     &__fields {
         display: flex;

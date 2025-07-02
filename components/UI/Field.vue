@@ -6,7 +6,7 @@ defineProps<{
     type?: FieldTypeAttribute | 'code' | 'textarea'
 }>()
 
-const model = defineModel<string | number>()
+const model = defineModel<string | number | boolean>()
 
 const active = ref(false)
 </script>

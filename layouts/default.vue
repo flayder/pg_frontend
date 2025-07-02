@@ -7,6 +7,7 @@
         <DialogAuth />
         <DialogContact />
         <DialogNotification />
+        <DialogCookie />
         <PopoverToast />
         <PageHeader />
         <div class="layout__content">
