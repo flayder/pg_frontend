@@ -25,7 +25,7 @@ const sortedGames = computed(() => toSorted())
     <PageMain title="Our Exclusive Porn Games. Don’t Waste Any Time!">
         <template #menu>
             <UIField v-model="sortBy" name="sort">
-                <option value="" selected>Sort by {{ !sortBy ? '...' : sortBy }}</option>
+                <option value="" selected>Sort by ...</option>
                 <option value="Popular">Popular</option>
                 <option value="Best">Best</option>
                 <option value="Date">Date</option>
